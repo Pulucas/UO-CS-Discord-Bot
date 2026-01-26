@@ -26,8 +26,12 @@ client.on(Events.GuildMemberAdd, (member) => {
   console.log(`${getDate()} ${member.guild.name} | ${member.user.username} (${member.id}) Joined`)
   const channel = member.guild.channels.cache.find(channel => channel.name.includes("welcome"))
   if (!channel || channel.type != ChannelType.GuildText) return
+  let memberCountSuffix = "th"
+  if (member.guild.memberCount % 10 === 1) memberCountSuffix = "st"
+  if (member.guild.memberCount % 10 === 2) memberCountSuffix = "nd"
+  if (member.guild.memberCount % 10 === 3) memberCountSuffix = "rd"
   try {
-    channel.send(`Welcome to the server ${member}`)
+    channel.send(`Welcome to the server ${member}! you are the ${member.guild.memberCount}${memberCountSuffix} person to join the server.`)
   } catch (err) {
     console.error(getDate(), "[Error] sending welcome message to welcome channel:", err)
   }
