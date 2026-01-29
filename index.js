@@ -22,16 +22,18 @@ client.once(Events.ClientReady, async () => {
 
 // This function runs every time someone joins a server (GuildMemeberAdd)
 // It sends a message to the channel with the name "welcome", welcoming the user to the server
-client.on(Events.GuildMemberAdd, (member) => {
+client.on(Events.GuildMemberAdd, async (member) => {
   console.log(`${getDate()} ${member.guild.name} | ${member.user.username} (${member.id}) Joined`)
   const channel = member.guild.channels.cache.find(channel => channel.name.includes("welcome"))
   if (!channel || channel.type != ChannelType.GuildText) return
+  const members = (await member.guild.members.fetch()).filter(member => !member.user.bot)
+  const memberCount = members.size
   let memberCountSuffix = "th"
-  if (member.guild.memberCount % 10 === 1) memberCountSuffix = "st"
-  if (member.guild.memberCount % 10 === 2) memberCountSuffix = "nd"
-  if (member.guild.memberCount % 10 === 3) memberCountSuffix = "rd"
+  if (memberCount % 10 === 1) memberCountSuffix = "st"
+  if (memberCount % 10 === 2) memberCountSuffix = "nd"
+  if (memberCount % 10 === 3) memberCountSuffix = "rd"
   try {
-    channel.send(`Welcome to the server ${member}! you are the ${member.guild.memberCount}${memberCountSuffix} person to join the server.`)
+    channel.send(`Welcome to the server ${member}! you are the ${memberCount}${memberCountSuffix} person to join the server.`)
   } catch (err) {
     console.error(getDate(), "[Error] sending welcome message to welcome channel:", err)
   }
