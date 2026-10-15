@@ -29,11 +29,11 @@ client.on(Events.GuildMemberAdd, async (member) => {
   const members = (await member.guild.members.fetch()).filter(member => !member.user.bot)
   const memberCount = members.size
   let memberCountSuffix = "th"
-  if (memberCount % 10 === 1) memberCountSuffix = "st"
-  if (memberCount % 10 === 2) memberCountSuffix = "nd"
-  if (memberCount % 10 === 3) memberCountSuffix = "rd"
+  if (memberCount % 10 === 1 && memberCount !== 11) memberCountSuffix = "st"
+  if (memberCount % 10 === 2 && memberCount !== 12) memberCountSuffix = "nd"
+  if (memberCount % 10 === 3 && memberCount !== 13) memberCountSuffix = "rd"
   try {
-    channel.send(`Welcome to the server ${member}! you are the ${memberCount}${memberCountSuffix} person to join the server.`)
+    channel.send(`Welcome to the server ${member}! You are the ${memberCount}${memberCountSuffix} person to join the server.`)
   } catch (err) {
     console.error(getDate(), "[Error] sending welcome message to welcome channel:", err)
   }
